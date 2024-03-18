@@ -1,0 +1,144 @@
+from wordcloud import WordCloud
+
+import matplotlib.pyplot as plt
+
+import numpy as np
+
+
+word_frequencies = {
+
+    "Inflation": 49,
+
+    "Bretton Woods": 90,
+
+    "Morgenthau Plan": 4,
+
+    "International Bank": 10,
+
+    "International Monetary Fund": 53,
+
+    "black market": 40,
+
+    "tax": 202,
+
+    "gold": 93,
+
+    "silver": 68,
+
+    "Truman": 32,
+
+    "reconstruction": 13,
+
+    "bonds": 221,
+
+    "resignation": 21,
+
+    "currency": 196
+
+}
+
+
+wordcloud = WordCloud(width=800, height=400, background_color='white', collocations=False, scale=2,
+
+                      color_func=accessible_color_func, font_path=None).generate_from_frequencies(word_frequencies)
+
+
+with plt.style.context("bmh"):
+
+  plt.figure(figsize=(10, 5))
+
+  plt.imshow(wordcloud, interpolation='bilinear')
+
+  plt.axis('off') 
+
+  plt.show()
+
+
+colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"]
+
+
+def accessible_color_func(word, font_size, position, orientation, random_state=None, **kwargs):
+
+  return np.random.choice(colors)
+
+
+
+
+
+
+
+
+import matplotlib.pyplot as plt
+
+import numpy as np
+
+
+war_loans = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth (Victory)"]
+
+goals = [9, 13, 15, 14, 16, None, 14, 11]
+
+sales = [13, 18.5, 19, 16.7, 20.6, 21.6, 26, 21]
+
+goals_adjusted = [goal if goal is not None else 0 for goal in goals]
+
+
+bar_width = 0.35
+
+index = np.arange(len(war_loans))
+
+
+fig, ax = plt.subplots(figsize=(12, 8))
+
+
+bars_goal = ax.bar(index, goals_adjusted, bar_width, label='Goal', color='orange')
+
+
+bars_actual = ax.bar(index + bar_width, sales, bar_width, label='Actual Sales', color='green')
+
+
+for bar, goal in zip(bars_goal, goals_adjusted):
+
+    if goal > 0: 
+
+        ax.annotate(f'${goal}B',
+
+                    xy=(bar.get_x() + bar.get_width() / 2, goal),
+
+                    xytext=(0, 3),
+
+                    textcoords="offset points",
+
+                    ha='center', va='bottom')
+
+
+for bar, sale, goal in zip(bars_actual, sales, goals_adjusted):
+
+    percentage = "" if goal == 0 else f" ({sale/goal*100:.0f}%)"
+
+    ax.annotate(f'${sale}B{percentage}',
+
+                xy=(bar.get_x() + bar.get_width() / 2, sale),
+
+                xytext=(0, 3),
+
+                textcoords="offset points",
+
+                ha='center', va='bottom')
+
+
+ax.set_xlabel('War Loan Number')
+
+ax.set_ylabel('Amount ($ In Billions)')
+
+ax.set_title('War Loan Goals vs Actual Sales')
+
+ax.set_xticks(index + bar_width / 2)
+
+ax.set_xticklabels(war_loans)
+
+ax.legend()
+
+
+plt.tight_layout()
+
+plt.show()
